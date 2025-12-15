@@ -1,55 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ankit ElectraTech Solutions</title>
-  <style>
-    :root{
-      --bg:#0b0f1a;
-      --card:#131a2b;
-      --primary:#4da3ff;
-      --accent:#ffb400;
-      --text:#e9eef6;
-      --muted:#9aa4b2;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
-    a{text-decoration:none}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ankit ElectraTech Solutions</title>
 
-    /* HERO */
-    header{min-height:90vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 20px;background:radial-gradient(1200px 600px at top right,#142042,transparent),radial-gradient(1000px 500px at bottom left,#0e1a36,transparent)}
-    header h1{font-size:52px;max-width:900px;margin:0 auto}
-    header p{font-size:20px;color:var(--muted);max-width:700px;margin:20px auto}
-    .btn{display:inline-block;margin:12px;padding:14px 30px;border-radius:30px;font-weight:700}
-    .btn.primary{background:var(--primary);color:#000}
-    .btn.accent{background:var(--accent);color:#000}
+<style>
+:root{
+  --bg:#0b0f1a;
+  --card:#131a2b;
+  --primary:#4da3ff;
+  --accent:#ffb400;
+  --text:#e9eef6;
+  --muted:#9aa4b2;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+a{text-decoration:none}
 
-    /* SECTIONS */
-    section{padding:90px 20px;max-width:1200px;margin:auto}
-    h2{text-align:center;font-size:38px;margin-bottom:50px}
+/* LOADER */
+#loader{
+  position:fixed;
+  inset:0;
+  background:#0b0f1a;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+#loader span{
+  font-size:32px;
+  letter-spacing:4px;
+  color:var(--primary);
+  animation:pulse 1.5s infinite;
+}
+@keyframes pulse{
+  0%{opacity:.3}
+  50%{opacity:1}
+  100%{opacity:.3}
+}
 
-    /* TRUST */
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:30px}
-    .card{background:var(--card);border-radius:20px;padding:30px;box-shadow:0 20px 40px rgba(0,0,0,.4)}
-    .card h3{margin-top:0;color:var(--primary)}
+/* CURSOR GLOW */
+#cursor{
+  position:fixed;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  pointer-events:none;
+  background:radial-gradient(circle, rgba(77,163,255,.4), transparent 60%);
+  transform:translate(-50%,-50%);
+  z-index:999;
+}
 
-    /* PROCESS */
-    .process{max-width:800px;margin:auto}
-    .process li{margin-bottom:14px;color:var(--muted)}
+/* SCROLL PROGRESS */
+#progress{
+  position:fixed;
+  top:0;left:0;
+  height:3px;
+  background:linear-gradient(90deg,#4da3ff,#ffb400);
+  width:0%;
+  z-index:1000;
+}
 
-    /* CTA */
-    .cta{background:linear-gradient(135deg,#1a2b55,#0e1a36);border-radius:30px;text-align:center;padding:80px 20px}
+/* HERO */
+header{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:80px 20px;
+  background:linear-gradient(-45deg,#0b0f1a,#142042,#1a2b55,#0e1a36);
+  background-size:400% 400%;
+  animation:bgMove 12s ease infinite;
+}
+@keyframes bgMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+header h1{font-size:52px;margin:0}
+header p{font-size:20px;color:var(--muted);margin:20px auto;max-width:700px}
 
-    footer{padding:40px 20px;text-align:center;color:var(--muted)}
-  </style>
+/* BUTTONS */
+.btn{
+  display:inline-block;
+  margin:12px;
+  padding:14px 30px;
+  border-radius:30px;
+  font-weight:700;
+  transition:all .3s ease;
+  position:relative;
+}
+.btn.primary{background:var(--primary);color:#000}
+.btn.accent{background:var(--accent);color:#000}
+.btn:hover{
+  transform:translateY(-4px) scale(1.05);
+  box-shadow:0 15px 40px rgba(77,163,255,.4);
+}
+
+/* SECTIONS */
+section{
+  padding:90px 20px;
+  max-width:1200px;
+  margin:auto;
+}
+h2{text-align:center;font-size:38px;margin-bottom:50px}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:30px;
+}
+.card{
+  background:var(--card);
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 20px 40px rgba(0,0,0,.4);
+  transition:.4s;
+}
+.card:hover{transform:translateY(-10px) scale(1.02)}
+.card h3{color:var(--primary)}
+
+/* ANIMATE */
+.animate{
+  opacity:0;
+  transform:translateY(40px);
+  transition:.8s ease;
+}
+.animate.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* PROCESS */
+.process{max-width:800px;margin:auto}
+.process li{margin-bottom:14px;color:var(--muted)}
+
+/* CTA */
+.cta{
+  background:linear-gradient(135deg,#1a2b55,#0e1a36);
+  border-radius:30px;
+  text-align:center;
+  padding:80px 20px;
+}
+
+/* DIVIDER */
+hr{
+  border:none;
+  height:1px;
+  margin:80px auto;
+  max-width:200px;
+  background:linear-gradient(90deg,transparent,#4da3ff,transparent);
+}
+
+/* FOOTER */
+footer{text-align:center;padding:40px;color:var(--muted)}
+</style>
 </head>
+
 <body>
+
+<div id="loader"><span>ANKIT ELECTRATECH</span></div>
+<div id="cursor"></div>
+<div id="progress"></div>
 
 <header>
   <div>
-    <h1>Engineering‑Grade Electrical Solutions</h1>
-    <p>Safe • Clean • Future‑Ready electrical systems for homes, offices & commercial spaces</p>
+    <h1><span id="typed"></span></h1>
+    <p class="animate">Safe • Clean • Future-Ready electrical systems for homes, offices & commercial spaces</p>
     <a href="tel:9893038847" class="btn accent">Call Now</a>
     <a href="https://wa.me/919893038847" class="btn primary">WhatsApp</a>
   </div>
@@ -57,51 +184,90 @@
 
 <section>
   <div class="grid">
-    <div class="card">30+ Years Family Experience</div>
-    <div class="card">Engineering‑Based Planning</div>
-    <div class="card">Premium Branded Materials</div>
-    <div class="card">Hotel‑Quality Clean Finishing</div>
-    <div class="card">3‑Level Supervision</div>
-    <div class="card">24×7 Support</div>
+    <div class="card animate">30+ Years Family Experience</div>
+    <div class="card animate">Engineering-Based Planning</div>
+    <div class="card animate">Premium Branded Materials</div>
+    <div class="card animate">Hotel-Quality Clean Finishing</div>
+    <div class="card animate">3-Level Supervision</div>
+    <div class="card animate">24×7 Support</div>
   </div>
 </section>
 
+<hr>
+
 <section>
-  <h2>Our Services</h2>
+  <h2 class="animate">Our Services</h2>
   <div class="grid">
-    <div class="card"><h3>Residential Electrical</h3><p>Complete wiring, modular switchboards, lighting, fans & safety systems.</p></div>
-    <div class="card"><h3>Commercial & Office</h3><p>Load planning, DB panels, power circuits & execution.</p></div>
-    <div class="card"><h3>DB Panels & Safety</h3><p>MCB, RCCB with neat cable dressing & labeling.</p></div>
-    <div class="card"><h3>Testing & Earthing</h3><p>Earth resistance, load & fault testing.</p></div>
-    <div class="card"><h3>Lighting & Fixtures</h3><p>Fans, lights, AC points, geysers.</p></div>
-    <div class="card"><h3>Maintenance</h3><p>Quick breakdown & post‑work support.</p></div>
+    <div class="card animate"><h3>Residential</h3><p>Complete house wiring & safety systems.</p></div>
+    <div class="card animate"><h3>Commercial</h3><p>Office & industrial electrical execution.</p></div>
+    <div class="card animate"><h3>DB Panels</h3><p>MCB, RCCB with neat finishing.</p></div>
+    <div class="card animate"><h3>Testing</h3><p>Load, earth & fault testing.</p></div>
   </div>
 </section>
 
+<hr>
+
 <section>
-  <h2>Our Work Process</h2>
-  <ul class="process">
-    <li>Engineer drawing & layout planning</li>
-    <li>Wall marking & machine jhiri</li>
+  <h2 class="animate">Our Work Process</h2>
+  <ul class="process animate">
+    <li>Engineer drawing & planning</li>
+    <li>Wall marking & jhiri</li>
     <li>FRLS conduit installation</li>
-    <li>Color‑coded copper wiring (no joints)</li>
-    <li>Switchboards & DB installation</li>
-    <li>Testing, labeling & clean handover</li>
+    <li>Copper wiring (no joints)</li>
+    <li>DB & switchboard installation</li>
+    <li>Testing & clean handover</li>
   </ul>
 </section>
 
 <section>
-  <div class="cta">
+  <div class="cta animate">
     <h2>Ready to Start Your Project?</h2>
-    <p>Get a free site inspection & professional consultation.</p>
+    <p>Free site inspection & professional consultation.</p>
     <a href="tel:9893038847" class="btn accent">Call Now</a>
     <a href="https://wa.me/919893038847" class="btn primary">WhatsApp</a>
   </div>
 </section>
 
 <footer>
-  © 2025 Ankit ElectraTech Solutions · Designed for trust & performance
+© 2025 Ankit ElectraTech Solutions · Hardcore Animated Website
 </footer>
+
+<script>
+/* LOADER */
+window.addEventListener("load",()=>{
+  document.getElementById("loader").style.display="none";
+});
+
+/* CURSOR */
+document.addEventListener("mousemove",e=>{
+  const c=document.getElementById("cursor");
+  c.style.left=e.clientX+"px";
+  c.style.top=e.clientY+"px";
+});
+
+/* SCROLL BAR */
+window.addEventListener("scroll",()=>{
+  const h=document.documentElement;
+  document.getElementById("progress").style.width=
+  (h.scrollTop/(h.scrollHeight-h.clientHeight))*100+"%";
+});
+
+/* TYPING */
+const text="Engineering-Grade Electrical Solutions";
+let i=0;
+(function type(){
+  if(i<text.length){
+    document.getElementById("typed").innerHTML+=text.charAt(i++);
+    setTimeout(type,80);
+  }
+})();
+
+/* SCROLL ANIMATE */
+const obs=new IntersectionObserver(e=>{
+  e.forEach(x=>x.isIntersecting&&x.target.classList.add("show"));
+},{threshold:.2});
+document.querySelectorAll(".animate").forEach(el=>obs.observe(el));
+</script>
 
 </body>
 </html>
