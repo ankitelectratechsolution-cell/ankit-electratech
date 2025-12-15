@@ -24,9 +24,9 @@ body{
 }
 a{text-decoration:none}
 
-/* LOADER */
+/* ===== LOADER ===== */
 #loader{
-  position:fixed;inset:0;
+  position:fixed; inset:0;
   background:#0b0f1a;
   display:flex;
   align-items:center;
@@ -34,32 +34,34 @@ a{text-decoration:none}
   z-index:9999;
 }
 #loader span{
+  font-size:28px;
+  letter-spacing:3px;
   color:var(--primary);
-  font-size:32px;
-  letter-spacing:4px;
   animation:pulse 1.5s infinite;
 }
-@keyframes pulse{0%{opacity:.3}50%{opacity:1}100%{opacity:.3}}
+@keyframes pulse{
+  0%{opacity:.3}
+  50%{opacity:1}
+  100%{opacity:.3}
+}
 
-/* LIQUID BG */
+/* ===== BACKGROUND LAYERS ===== */
 #liquidBG{
   position:fixed;
   inset:0;
-  z-index:-3;
+  z-index:-5;
 }
-
-/* GRAIN */
 #grain{
   position:fixed;
   inset:0;
   pointer-events:none;
-  z-index:-1;
-  opacity:.15;
+  z-index:-4;
+  opacity:.12;
   mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* HERO */
+/* ===== HERO ===== */
 header{
   min-height:100vh;
   display:flex;
@@ -76,8 +78,26 @@ header{
   50%{background-position:100% 50%}
   100%{background-position:0% 50%}
 }
+
+/* LOGO */
+.logo{
+  width:170px;
+  margin-bottom:25px;
+  filter:drop-shadow(0 10px 25px rgba(77,163,255,.35));
+  animation:logoFloat 6s ease-in-out infinite;
+}
+@keyframes logoFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-12px)}
+}
+
 header h1{font-size:52px;margin:0}
-header p{font-size:20px;color:var(--muted);max-width:700px;margin:20px auto}
+header p{
+  font-size:20px;
+  color:var(--muted);
+  max-width:700px;
+  margin:20px auto;
+}
 
 /* BUTTONS */
 .btn{
@@ -96,7 +116,11 @@ header p{font-size:20px;color:var(--muted);max-width:700px;margin:20px auto}
 }
 
 /* SECTIONS */
-section{padding:90px 20px;max-width:1200px;margin:auto}
+section{
+  padding:90px 20px;
+  max-width:1200px;
+  margin:auto;
+}
 h2{text-align:center;font-size:38px;margin-bottom:50px}
 
 /* GRID */
@@ -115,7 +139,7 @@ h2{text-align:center;font-size:38px;margin-bottom:50px}
 .card:hover{transform:translateY(-10px) scale(1.02)}
 .card h3{color:var(--primary)}
 
-/* SCROLL ANIM */
+/* SCROLL ANIMATION */
 .animate{
   opacity:0;
   transform:translateY(40px);
@@ -135,7 +159,11 @@ h2{text-align:center;font-size:38px;margin-bottom:50px}
 }
 
 /* FOOTER */
-footer{text-align:center;padding:40px;color:var(--muted)}
+footer{
+  text-align:center;
+  padding:40px;
+  color:var(--muted);
+}
 </style>
 </head>
 
@@ -147,8 +175,11 @@ footer{text-align:center;padding:40px;color:var(--muted)}
 
 <header>
   <div>
+    <img src="logo.png" alt="Ankit ElectraTech Solutions Logo" class="logo">
+
     <h1><span id="typed"></span></h1>
     <p class="animate">Safe • Clean • Future-Ready electrical systems</p>
+
     <a href="tel:9893038847" class="btn accent">Call Now</a>
     <a href="https://wa.me/919893038847" class="btn primary">WhatsApp</a>
   </div>
@@ -170,18 +201,23 @@ footer{text-align:center;padding:40px;color:var(--muted)}
   </div>
 </section>
 
-<footer>© 2025 Ankit ElectraTech Solutions</footer>
+<footer>
+© 2025 Ankit ElectraTech Solutions
+</footer>
 
 <script>
-/* LOADER */
-window.onload=()=>document.getElementById("loader").style.display="none";
+/* SAFE LOADER HIDE */
+window.addEventListener("load",()=>{
+  const l=document.getElementById("loader");
+  if(l) l.style.display="none";
+});
 
-/* TYPING */
-const t="Engineering-Grade Electrical Solutions";
+/* TYPING TEXT */
+const text="Engineering-Grade Electrical Solutions";
 let i=0;
 (function type(){
-  if(i<t.length){
-    document.getElementById("typed").innerHTML+=t[i++];
+  if(i<text.length){
+    document.getElementById("typed").innerHTML+=text.charAt(i++);
     setTimeout(type,80);
   }
 })();
@@ -192,19 +228,30 @@ const obs=new IntersectionObserver(e=>{
 },{threshold:.2});
 document.querySelectorAll(".animate").forEach(el=>obs.observe(el));
 
-/* LIQUID BG */
+/* LIQUID BACKGROUND (STABLE) */
 const c=document.getElementById("liquidBG");
 const ctx=c.getContext("2d");
 let w,h,scrollY=0,mouse={x:0,y:0};
-function resize(){w=c.width=innerWidth;h=c.height=innerHeight}
-resize();addEventListener("resize",resize);
-addEventListener("mousemove",e=>{mouse.x=e.clientX;mouse.y=e.clientY});
-addEventListener("scroll",()=>scrollY=scrollY=scrollY=window.scrollY);
 
-const blobs=[...Array(6)].map((_,i)=>({
+function resize(){
+  w=c.width=window.innerWidth;
+  h=c.height=window.innerHeight;
+}
+resize();
+window.addEventListener("resize",resize);
+
+window.addEventListener("mousemove",e=>{
+  mouse.x=e.clientX;
+  mouse.y=e.clientY;
+});
+window.addEventListener("scroll",()=>{
+  scrollY=window.scrollY;
+});
+
+const blobs=[...Array(5)].map((_,i)=>({
   x:Math.random()*w,
   y:Math.random()*h,
-  r:300+Math.random()*200,
+  r:280+Math.random()*180,
   s:0.001+Math.random()*0.001,
   p:Math.random()*Math.PI*2
 }));
@@ -213,13 +260,17 @@ const blobs=[...Array(6)].map((_,i)=>({
   ctx.clearRect(0,0,w,h);
   blobs.forEach((b,i)=>{
     b.p+=b.s;
-    const x=b.x+Math.sin(b.p+scrollY*0.002)*120+(mouse.x-w/2)*0.03;
-    const y=b.y+Math.cos(b.p+scrollY*0.002)*120+(mouse.y-h/2)*0.03;
+    const x=b.x+Math.sin(b.p+scrollY*0.002)*100+(mouse.x-w/2)*0.02;
+    const y=b.y+Math.cos(b.p+scrollY*0.002)*100+(mouse.y-h/2)*0.02;
+
     const g=ctx.createRadialGradient(x,y,0,x,y,b.r);
-    g.addColorStop(0,`hsla(${200+i*20+scrollY*0.05},80%,60%,0.35)`);
+    g.addColorStop(0,`hsla(${210+i*20+scrollY*0.04},80%,60%,0.32)`);
     g.addColorStop(1,"transparent");
+
     ctx.fillStyle=g;
-    ctx.beginPath();ctx.arc(x,y,b.r,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x,y,b.r,0,Math.PI*2);
+    ctx.fill();
   });
   requestAnimationFrame(draw);
 })();
