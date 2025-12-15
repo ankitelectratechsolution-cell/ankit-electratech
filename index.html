@@ -1,61 +1,229 @@
-<canvas id="bgCanvas"></canvas>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ankit ElectraTech Solutions</title>
 
 <style>
-#bgCanvas{
+:root{
+  --bg:#0b0f1a;
+  --card:#131a2b;
+  --primary:#4da3ff;
+  --accent:#ffb400;
+  --text:#e9eef6;
+  --muted:#9aa4b2;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+}
+a{text-decoration:none}
+
+/* LOADER */
+#loader{
+  position:fixed;inset:0;
+  background:#0b0f1a;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+#loader span{
+  color:var(--primary);
+  font-size:32px;
+  letter-spacing:4px;
+  animation:pulse 1.5s infinite;
+}
+@keyframes pulse{0%{opacity:.3}50%{opacity:1}100%{opacity:.3}}
+
+/* LIQUID BG */
+#liquidBG{
   position:fixed;
   inset:0;
-  z-index:-2;
-  filter: blur(60px);
-  opacity:0.6;
+  z-index:-3;
 }
+
+/* GRAIN */
+#grain{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  opacity:.15;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* HERO */
+header{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:80px 20px;
+  background:linear-gradient(-45deg,#0b0f1a,#142042,#1a2b55,#0e1a36);
+  background-size:400% 400%;
+  animation:bgMove 12s ease infinite;
+}
+@keyframes bgMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+header h1{font-size:52px;margin:0}
+header p{font-size:20px;color:var(--muted);max-width:700px;margin:20px auto}
+
+/* BUTTONS */
+.btn{
+  display:inline-block;
+  margin:12px;
+  padding:14px 30px;
+  border-radius:30px;
+  font-weight:700;
+  transition:.3s;
+}
+.btn.primary{background:var(--primary);color:#000}
+.btn.accent{background:var(--accent);color:#000}
+.btn:hover{
+  transform:translateY(-4px) scale(1.05);
+  box-shadow:0 15px 40px rgba(77,163,255,.4);
+}
+
+/* SECTIONS */
+section{padding:90px 20px;max-width:1200px;margin:auto}
+h2{text-align:center;font-size:38px;margin-bottom:50px}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:30px;
+}
+.card{
+  background:var(--card);
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 20px 40px rgba(0,0,0,.4);
+  transition:.4s;
+}
+.card:hover{transform:translateY(-10px) scale(1.02)}
+.card h3{color:var(--primary)}
+
+/* SCROLL ANIM */
+.animate{
+  opacity:0;
+  transform:translateY(40px);
+  transition:.8s ease;
+}
+.animate.show{
+  opacity:1;
+  transform:none;
+}
+
+/* CTA */
+.cta{
+  background:linear-gradient(135deg,#1a2b55,#0e1a36);
+  border-radius:30px;
+  text-align:center;
+  padding:80px 20px;
+}
+
+/* FOOTER */
+footer{text-align:center;padding:40px;color:var(--muted)}
 </style>
+</head>
+
+<body>
+
+<div id="loader"><span>ANKIT ELECTRATECH</span></div>
+<canvas id="liquidBG"></canvas>
+<div id="grain"></div>
+
+<header>
+  <div>
+    <h1><span id="typed"></span></h1>
+    <p class="animate">Safe • Clean • Future-Ready electrical systems</p>
+    <a href="tel:9893038847" class="btn accent">Call Now</a>
+    <a href="https://wa.me/919893038847" class="btn primary">WhatsApp</a>
+  </div>
+</header>
+
+<section>
+  <div class="grid">
+    <div class="card animate">30+ Years Experience</div>
+    <div class="card animate">Engineering-Based Planning</div>
+    <div class="card animate">Premium Materials</div>
+    <div class="card animate">Clean Finishing</div>
+  </div>
+</section>
+
+<section>
+  <div class="cta animate">
+    <h2>Ready to Start?</h2>
+    <p>Free site inspection & consultation</p>
+  </div>
+</section>
+
+<footer>© 2025 Ankit ElectraTech Solutions</footer>
 
 <script>
-const canvas = document.getElementById("bgCanvas");
-const ctx = canvas.getContext("2d");
-let w, h;
+/* LOADER */
+window.onload=()=>document.getElementById("loader").style.display="none";
 
-function resize(){
-  w = canvas.width = window.innerWidth;
-  h = canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener("resize", resize);
+/* TYPING */
+const t="Engineering-Grade Electrical Solutions";
+let i=0;
+(function type(){
+  if(i<t.length){
+    document.getElementById("typed").innerHTML+=t[i++];
+    setTimeout(type,80);
+  }
+})();
 
-/* FLOWING BLOBS */
-const blobs = Array.from({length:5},()=>({
+/* SCROLL REVEAL */
+const obs=new IntersectionObserver(e=>{
+  e.forEach(x=>x.isIntersecting&&x.target.classList.add("show"));
+},{threshold:.2});
+document.querySelectorAll(".animate").forEach(el=>obs.observe(el));
+
+/* LIQUID BG */
+const c=document.getElementById("liquidBG");
+const ctx=c.getContext("2d");
+let w,h,scrollY=0,mouse={x:0,y:0};
+function resize(){w=c.width=innerWidth;h=c.height=innerHeight}
+resize();addEventListener("resize",resize);
+addEventListener("mousemove",e=>{mouse.x=e.clientX;mouse.y=e.clientY});
+addEventListener("scroll",()=>scrollY=scrollY=scrollY=window.scrollY);
+
+const blobs=[...Array(6)].map((_,i)=>({
   x:Math.random()*w,
   y:Math.random()*h,
-  r:300 + Math.random()*200,
-  dx:(Math.random()-.5)*0.4,
-  dy:(Math.random()-.5)*0.4,
-  hue:200 + Math.random()*60
+  r:300+Math.random()*200,
+  s:0.001+Math.random()*0.001,
+  p:Math.random()*Math.PI*2
 }));
 
-function animate(){
+(function draw(){
   ctx.clearRect(0,0,w,h);
-  blobs.forEach(b=>{
-    b.x+=b.dx;
-    b.y+=b.dy;
-
-    if(b.x<-b.r) b.x=w+b.r;
-    if(b.x>w+b.r) b.x=-b.r;
-    if(b.y<-b.r) b.y=h+b.r;
-    if(b.y>h+b.r) b.y=-b.r;
-
-    const grad = ctx.createRadialGradient(
-      b.x,b.y,0,
-      b.x,b.y,b.r
-    );
-    grad.addColorStop(0,`hsla(${b.hue},80%,60%,0.35)`);
-    grad.addColorStop(1,"transparent");
-
-    ctx.fillStyle=grad;
-    ctx.beginPath();
-    ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
-    ctx.fill();
+  blobs.forEach((b,i)=>{
+    b.p+=b.s;
+    const x=b.x+Math.sin(b.p+scrollY*0.002)*120+(mouse.x-w/2)*0.03;
+    const y=b.y+Math.cos(b.p+scrollY*0.002)*120+(mouse.y-h/2)*0.03;
+    const g=ctx.createRadialGradient(x,y,0,x,y,b.r);
+    g.addColorStop(0,`hsla(${200+i*20+scrollY*0.05},80%,60%,0.35)`);
+    g.addColorStop(1,"transparent");
+    ctx.fillStyle=g;
+    ctx.beginPath();ctx.arc(x,y,b.r,0,Math.PI*2);ctx.fill();
   });
-  requestAnimationFrame(animate);
-}
-animate();
+  requestAnimationFrame(draw);
+})();
 </script>
+
+</body>
+</html>
